@@ -1,0 +1,17 @@
+const jwt = require('jsonwebtoken')
+
+const AuthHandler = (req, res, next) => {
+    try {
+        const token = req.headers.authorization.split(" ")[1];
+        const decoded = jwt.verify(token, process.env.JWT_KEY);
+
+        req.UserIdentity = decoded;
+        next();
+    } catch (error) {
+        return res.status(401).json({
+            message: 'Unauthorized'
+        });
+    }
+}
+
+module.exports = AuthHandler
